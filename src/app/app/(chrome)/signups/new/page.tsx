@@ -45,7 +45,11 @@ export default async function NewSignupPage({ searchParams }: PageProps) {
       visibility: 'unlisted',
     });
     if (!result.ok) {
-      redirect(`/app/signups/new?manual=1&error=${encodeURIComponent(result.error.message)}`);
+      const message = result.error.message.includes('String must contain at least 2')
+        ? 'Title must be at least 2 characters long.'
+        : result.error.message;
+
+      redirect(`/app/signups/new?manual=1&error=${encodeURIComponent(message)}`);
     }
     redirect(`/app/signups/${result.value.id}`);
   }
